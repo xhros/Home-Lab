@@ -85,7 +85,7 @@ ceph config-key set mgr/dashboard/crt -i /etc/ceph/dashboard-crt.pem
 Do you own a domain name and use it internally? If not, move to the next section. Stay tuned for a future update on this section.
 
 <H2>Section 4a: Setting up the Dashboard Configs - Node Level</H2>
-Since we already setup the environmental variables, just copy and paste the following lines. If you are using the global option and not environmental variables, skip to section 4b. 
+Must be performed on all nodes. Since we already setup the environmental variables, just copy and paste the following lines. If you are using the global option and not environmental variables, skip to section 4b. 
 
 ```bash
 ceph config set mgr mgr/dashboard/$name/server_addr $server_addr
