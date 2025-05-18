@@ -59,7 +59,7 @@ nano [/path/to/pw/file]
 chmod 600 [/path/to/pw/file]
 ```
 
-<h4>Create ceph dashboard admin user</h4>
+<h4>Creating a ceph dashboard admin user</h4>
 Syntax: ceph dashboard ac-user-create [user] -i [/path/to/pw/file] [role]
 
 ```bash
@@ -75,7 +75,6 @@ openssl req -newkey rsa:4096 -nodes -x509 \
 ```
 
 <h4>Pointing the dashboard to use the self signed certs</h4>
-<h4>Syntax: ceph dashboard ac-user-create [user] -i [/path/to/pw/file] [role]</h4>
 
 ```bash
 ceph config-key set mgr/dashboard/key -i /etc/ceph/dashboard-key.pem
