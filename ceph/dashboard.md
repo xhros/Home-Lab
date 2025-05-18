@@ -141,35 +141,43 @@ You might get a warning that the dashboard is already disabled, but running it a
 
 <h2> Accessing the dashboard </h2>
 There are two ways to access the dashboard. Using the IP, or using the FQDN. From testing, I could navigate to the dashboard login page using the FQDN, but it would not acceept the password. However, if I navigated to the login page using the IP address, it would accept the password. I will journey down the rabbit hole to get the FQDN to work. 
-
+<br/>
+<br/>
 Secure: https://[IP or FQDN]:8443 
+<br/>
 Insecure: http://[IP or FQDN]:8080
 
 <h2>Troubleshooting</h2>
 <h4>Ceph Crash Logs</h4>
 This is at a global level since all crash logs are stored in the same place. No need to perform this on every node. Once all crash logs are handled and removed, the cluster health will return to normal.
+<br/>
+<br/>
 
+Show a list of all crash logs
 ```bash
-# Show a list of all crash logs
 ceph crash ls
-
-# View a crash log
-ceph crash info [CRASH_ID]
-
-# Remove a crash log
-ceph crash rm [CRASH_ID]
-
-# Restart the dashboard module on all manager nodes to verify that all items were corrected
-ceph mgr module disable dashboard && ceph mgr module enable dashboard
-
-# This method also applies to any other errors that need addressing, not just the dashboard
-# Any errors that haven't been addressed or missed will return after restarting the dashboard module
-# Rinse and repeat until the dashboard health returns to normal
 ```
 
-<h4>Manager Node Logs</h4>
-**Warning!** Rabbit hole #2 through 23: You will see a lot of 'has missing NOTIFY_TYPES member' warnings when using the manager node logs. These have no bearing on the dashboard, so they can safely be ignored. All crash logs must be cleared before the dashboard returns to normal. There is a set time that these will be cleared, but it's good practice to fix them and remove them manually while troubleshooting. This will allow you to verify that all items are addressed. 
+View a crash log
+```bash
+ceph crash info [CRASH_ID]
+```
+
+Remove a crash log
+```bash 
+ceph crash rm [CRASH_ID]
+```
+
+Restart the dashboard module on the node causing a crash once you've addressed it.
+```bash
+ceph mgr module disable dashboard && ceph mgr module enable dashboard
+```
+
+Rinse and repeat until no crashes are reported. You can use crash logs to find any other errors that need addressing as well. This will only show for items that have caused a crash, so other errors might not be shown since it may not have caused a crash. Address any dashboard errors first because you might see other crashes caused by the dashboard. This way you can rule out the dashboard as being the cause.
+
+<h3>Manager Node Logs</h3>
+**Warning!** Rabbit hole #2 through 23: You will see a lot of 'has missing NOTIFY_TYPES member' warnings when using the manager node logs. These have no bearing on the dashboard, so they can safely be ignored. There should be a set time that will automatically clear crash logs, but it's good practice to address them and remove them manually while troubleshooting. This will allow you to verify that all items have been addressed. 
 
 ```bash
-journalctl -xeu ceph-mgr@[serverName]
+journalctl -xeu ceph-mgr@$name
 ```
