@@ -33,7 +33,7 @@ journalctl -xeu ceph-mgr@$name
 <h3>Let's get back to it</h3>
 
 
-These commands need to be run on every manager node. Make sure to update the IP address and server name to match your setup. Unless you are running a different shell, you only need to worry about the bash commands since Proxmox uses Debian. You only need to perform the environmental variables for the shell that you are using. Move on the the module install once you run those. 
+These commands need to be run on every manager node. Make sure to update the IP address and server name to match your setup. Unless you are running a different shell, you only need to worry about the bash commands since Proxmox uses Debian. You only need to run the commands to add the environmental variables for the shell that you are using. Move on to the the module install once you run those.
 
 <h4>bash: ~/.bashrc</h4>
 
