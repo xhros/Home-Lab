@@ -11,6 +11,28 @@ Do you like to live dangerously? Skip to the installation section and use the de
 The dashboard module needs to be installed on every manager node, so each node will needs environmental variables setup. Make sure to update the IP address and server name to match the manager nodes details. Rabbit hole #1: You cannot use ports 443 or 80 since they are already allocated for use with [NGINX Proxy Manager](https://pve.proxmox.com/wiki/Web_Interface_Via_Nginx_Proxy). The dashboard uses the default ports of 8443 (secure) and 8080 (insecure), but you can change them to whatever you want. You really don't need to setup or mess with the insecure port, but why not have full control over it if it's there by default.
 
 <h2>Section 1: Environmental Variables</h2>
+
+<h4>Major benefits for using environmental variables</h4>
+You will continue to run commands as you are working through the dashboard. It gets annoying having to update the commands to match each of the nodes any time you want to run a command you copied over. With environmental variables, you can set the variable and never have to reference an IP address, or node name. This is universal and can be used for anything running on the host, not just the dashboard.
+<br/>
+<br/>
+Examples: These three commands:
+
+```bash
+journalctl -xeu ceph-mgr@node1
+journalctl -xeu ceph-mgr@node2
+journalctl -xeu ceph-mgr@node3
+```
+
+Can be replaced with this single command: 
+
+```bash
+journalctl -xeu ceph-mgr@$name
+```
+
+<h3>Let's get back to it</h3>
+
+
 These commands need to be run on every manager node. Make sure to update the IP address and server name to match your setup. Unless you are running a different shell, you only need to worry about the bash commands since Proxmox uses Debian. You only need to perform the environmental variables for the shell that you are using. Move on the the module install once you run those. 
 
 <h4>bash: ~/.bashrc</h4>
@@ -43,6 +65,11 @@ echo "export name=[serverName]" >> ~/.zshrc
 omz reload
 ```
 
+**YOU MUST RELOAD YOUR SHELL FOR THE ENVIRONMENTAL VARIABLES TO TAKE EFFECT** 
+<br/>
+If you are having issues, run 'cat ~/.bashrc' for bash or 'cat ~/.zshrc' for zsh. You should see them just above the prompt since they are added to the bottom. If they are there and correct, just exit the shell and log back in, depending on how you access it.
+
+
 <h2>Section 2: Installing the dashboard module</h2>
 
 <h4>2a: Installing the module - Run on all nodes</h4>
@@ -51,9 +78,8 @@ omz reload
 apt install ceph-mgr-dashboard -y
 ```
 
-<h4>create a password file for the dashboard user</h4>
-You can place the password file wherever you like. It is best to place it in the etc/pve/ceph folder since those are replicated to all nodes. You only need to run this once.</h4>
-I use nano, but use whatever text editor you prefer and put your desired password in the dashboard-pw file. Normally you chmod 600 on the password file, but since we are placing it in the /etc/pve/ceph folder, Proxmox handles the permissions.
+<h4>Create a password file for the dashboard user</h4>
+You can place the password file wherever you like. It is best to place it in the etc/pve/ceph folder since those are replicated to all nodes. You only need to run this once.</h4> Use whatever text editor you prefer. Normally you run chmod 600 on the password file, but since we are placing it in the /etc/pve/ceph folder, Proxmox handles the permissions.
 
 ```bash
 nano /etc/pve/ceph/dashboard-pw
@@ -73,7 +99,7 @@ ceph dashboard create-self-signed-cert
 ```
 
 <H2>Section 4a: Setting up the Dashboard Configs - Node Level</H2>
-Must be performed on all nodes. Since we already setup the environmental variables, just copy and paste the following lines. If you are using the global option and not environmental variables, skip to section 4b. 
+Must be performed on all nodes. Since we have setup environmental variables, just copy and paste the following lines on each node.
 
 ```bash
 ceph config set mgr mgr/dashboard/$name/server_addr $server_addr
@@ -82,6 +108,7 @@ ceph config set mgr mgr/dashboard/$name/ssl_server_port $ssl_server_port
 ```
 
 <h3>Checking the dashboard configs - Node Level </h3>
+Note: You can copy and paste all three lines at the same time and they will spit out in the same order.
 
 ```bash
 ceph config get mgr mgr/dashboard/$name/server_addr
@@ -90,7 +117,7 @@ ceph config get mgr mgr/dashboard/$name/ssl_server_port
 ```
 
 <H2>Section 4b: Setting up the Dashboard Configs - Global Level</H2>
-This is only performed one on the master node. We will be using the default ports. Change these to fit your needs. Using :: as the server address binds to all IPv4 and IPv6 addresses.
+Technically, this isn't even needed since the dashboard uses the default configs. You can check the configs and adjust as needed. This is only performed on the master node since it's global. Note: Using :: as the server address binds to all IPv4 and IPv6 addresses.
 
 ```bash
 ceph config set mgr mgr/dashboard/server_addr [::]
@@ -110,6 +137,7 @@ ceph config get mgr mgr/dashboard/ssl_server_port
 ```bash
 ceph mgr module disable dashboard && ceph mgr module enable dashboard
 ```
+You might get a warning that the dashboard is already disabled, but running it anyways in case it was enabled.
 
 <h2> Accessing the dashboard </h2>
 There are two ways to access the dashboard. Using the IP, or using the FQDN. From testing, I could navigate to the dashboard login page using the FQDN, but it would not acceept the password. However, if I navigated to the login page using the IP address, it would accept the password. I will journey down the rabbit hole to get the FQDN to work. 
