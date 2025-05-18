@@ -44,28 +44,25 @@ omz reload
 ```
 
 <h2>Section 2: Installing the dashboard module</h2>
-Run all section 2 commands on all manager node
 
-<h4>2a: Installing the module</h4>
+<h4>2a: Installing the module - Run on all nodes</h4>
 
 ```bash
 apt install ceph-mgr-dashboard -y
 ```
 
-<h4>create a password file for the dashboard user. This can be placed wherever</h4>
+<h4>create a password file for the dashboard user. Run only once since it's being placed in the /etc/pve/ceph folder</h4>
+I use nano, but use whatever text editor you prefer and put your desired password in the dashboard-pw file. Normally you chmod 600 on the password file, but since we are placing it in the /etc/pve/ceph folder, Proxmox handles the permissions.
 
 ```bash
-nano [/etc/pve/ceph/ceph_password_file]
-```
-```bash
-chmod 600 [/etc/pve/ceph/ceph_password_file]
+nano /etc/pve/ceph/dashboard-pw
 ```
 
 <h4>Creating a ceph dashboard admin user</h4>
-Syntax: ceph dashboard ac-user-create [user] -i [/etc/pve/ceph/ceph_password_file] [role]
+Syntax: ceph dashboard ac-user-create [user] -i [/etc/pve/ceph/dashboard-pw] [role]
 
 ```bash
-ceph dashboard ac-user-create admin -i /etc/pve/ceph/ceph_password_file administrator
+ceph dashboard ac-user-create admin -i /etc/pve/ceph/dashboard-pw administrator
 ```
 
 <h2>Section 3a: Generate a self signed certificate - quick and dirty method</h2>
