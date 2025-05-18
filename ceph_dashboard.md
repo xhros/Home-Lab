@@ -54,8 +54,11 @@ apt install ceph-mgr-dashboard -y
 
 ```bash
 nano [/path/to/pw/file]
+```
+```bash
 chmod 600 [/path/to/pw/file]
 ```
+
 <h4>Create ceph dashboard admin user</h4>
 Syntax: ceph dashboard ac-user-create [user] -i [/path/to/pw/file] [role]
 
