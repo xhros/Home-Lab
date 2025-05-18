@@ -8,6 +8,8 @@ Do you like to live dangerously? Skip to the installation section and use the de
 
 The dashboard module needs to be installed on every manager node, so each node will needs environmental variables setup. Make sure to update the IP address and server name to match the manager nodes details. Rabbit hole #1: You cannot use ports 443 or 80 since they are already allocated for use with [NGINX Proxy Manager](https://pve.proxmox.com/wiki/Web_Interface_Via_Nginx_Proxy). The dashboard uses the default ports of 8443 (secure) and 8080 (insecure), but you can change them to whatever you want. You really don't need to setup or mess with the insecure port, but why not have full control over it if it's there by default.
 
+<h2>You can place the password file as well the certs wherever you like. It is best to place them in the etc/pve/ceph folder since those are replicated to all nodes. </h2>
+
 <h2>Section 1: Environmental Variables</h2>
 These commands need to be run on every manager node. Make sure to update the IP address and server name to match your setup. Unless you are running a different shell, you only need to worry about the bash commands since Proxmox uses Debian. You only need to perform the environmental variables for the shell that you are using. Move on the the module install once you run those. 
 
@@ -53,32 +55,32 @@ apt install ceph-mgr-dashboard -y
 <h4>create a password file for the dashboard user. This can be placed wherever</h4>
 
 ```bash
-nano [/path/to/pw/file]
+nano [/etc/pve/ceph/ceph_password_file]
 ```
 ```bash
-chmod 600 [/path/to/pw/file]
+chmod 600 [/etc/pve/ceph/ceph_password_file]
 ```
 
 <h4>Creating a ceph dashboard admin user</h4>
-Syntax: ceph dashboard ac-user-create [user] -i [/path/to/pw/file] [role]
+Syntax: ceph dashboard ac-user-create [user] -i [/etc/pve/ceph/ceph_password_file] [role]
 
 ```bash
-ceph dashboard ac-user-create admin -i /path/to/pw/file administrator
+ceph dashboard ac-user-create admin -i /etc/pve/ceph/ceph_password_file administrator
 ```
 
 <h2>Section 3a: Generate a self signed certificate - quick and dirty method</h2>
 
 ```bash
 openssl req -newkey rsa:4096 -nodes -x509 \
--keyout /etc/ceph/dashboard-key.pem -out /etc/ceph/dashboard-crt.pem -sha512 \
+-keyout /etc/pve/ceph/dashboard-key.pem -out /etc/pve/ceph/dashboard-crt.pem -sha512 \
 -days 3650 -subj "/CN=IT/O=ceph-mgr-dashboard" -utf8
 ```
 
 <h4>Pointing the dashboard to use the self signed certs</h4>
 
 ```bash
-ceph config-key set mgr/dashboard/key -i /etc/ceph/dashboard-key.pem
-ceph config-key set mgr/dashboard/crt -i /etc/ceph/dashboard-crt.pem
+ceph config-key set mgr/dashboard/key -i /etc/pve/ceph/dashboard-key.pem
+ceph config-key set mgr/dashboard/crt -i /etc/pve/ceph/dashboard-crt.pem
 ```
 
 <h2>Section 3b: Generating a CA certificate</h2>
