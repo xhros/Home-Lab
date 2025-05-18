@@ -1,1 +1,97 @@
 Setting up the ceph dashboard
+
+Environmental variables. What?! But why?!?!
+- We are setting these up as they are easier to work with
+- These will be at the node level
+- Global settings can cause dashboards to crash
+- Do you like to live dangerously? Skip to the installation section
+
+#Make sure to update the IP address and server name.
+#These are using the default ports, but you can change them if needed.
+#You cannot use ports 443 or 80 since those are already allocated. 
+
+#RUN THESE COMMANDS ON EVERY NODE. UPDATE THE IP ADDRESS AND SERVER NAME.
+#BASH: For bash only. Proxmox is Debian based, which they use bash by default.
+
+#BASH
+#bash: ~/.bashrc
+echo "export server_addr=[node IP]" >> ~/.bashrc
+echo "export server_port=8080" >> ~/.bashrc
+echo "export ssl_server_port=8443" >> ~/.bashrc
+echo "export name=[serverName]" >> ~/.bashrc
+source ~/.bashrc
+#Skip to the installation section if you are using bash
+
+#ZSH
+#zsh: ~/.zshrc
+echo "export server_addr=[node IP]" >> ~/.zshrc
+echo "export server_port=8080" >> ~/.zshrc
+echo "export ssl_server_port=8443" >> ~/.zshrc
+echo "export name=[serverName]" >> ~/.zshrc
+run 'omz reload' if using oh-my-zsh, else run 'source ~/.zshrc'
+
+#Install the dashboard module on all manager nodes
+apt install ceph-mgr-dashboard -y
+
+# create a password file for the dashboard. This can be placed wherever.
+nano [/path/to/pw/file]
+chmod 600 [/path/to/pw/file]
+
+#Create ceph dashboard admin user 
+#ceph dashboard ac-user-create [user] -i [/path/to/pw/file] [role]
+ceph dashboard ac-user-create admin -i /path/to/pw/file administrator
+
+# generate certificate - quick and dirty method
+openssl req -newkey rsa:4096 -nodes -x509 \
+-keyout /etc/ceph/dashboard-key.pem -out /etc/ceph/dashboard-crt.pem -sha512 \
+-days 3650 -subj "/CN=IT/O=ceph-mgr-dashboard" -utf8
+
+# point the dashboard to use the self signed certs
+ceph config-key set mgr/dashboard/key -i /etc/ceph/dashboard-key.pem
+ceph config-key set mgr/dashboard/crt -i /etc/ceph/dashboard-crt.pem
+
+# if you want to generate a CA signed certificate, you can use the following commands
+stay tuned for a future update on this section. Will be added within the next day.
+
+
+# Skip to the next section if you want to use environmental variables for each node
+# This section is only for those that like to live dangerously
+# This might cause issues upon reboot, so you've been warned!
+
+#Set dashboard configs - Global
+# check default global configs, and update as needed. 
+ceph config get mgr mgr/dashboard/server_addr
+ceph config get mgr mgr/dashboard/server_port
+ceph config get mgr mgr/dashboard/ssl_server_port
+
+# set global configs
+ceph config set mgr mgr/dashboard/server_addr [::]
+ceph config set mgr mgr/dashboard/server_port [$server_port]
+ceph config set mgr mgr/dashboard/ssl_server_port $ssl_server_port
+
+#Set dashboard configs - Node Level (Run these on every node)
+# just copy & paste since we set the variables above
+ceph config set mgr mgr/dashboard/$name/server_addr $server_addr
+ceph config set mgr mgr/dashboard/$name/server_port $server_port
+ceph config set mgr mgr/dashboard/$name/ssl_server_port $ssl_server_port
+
+#Check dashboard configs - Node Level (Run these on every node)
+# just copy & paste since we set the variables above
+ceph config get mgr mgr/dashboard/$name/server_addr
+ceph config get mgr mgr/dashboard/$name/server_port
+ceph config get mgr mgr/dashboard/$name/ssl_server_port
+
+#Start the dashbord module
+ceph mgr module enable dashboard
+
+#Access the dashboard: #Use IP for now as FQDN causes certificate isues and won't allow you to sign in.
+secured: https://[IP or FQDN]:8443 
+insecure: http://[IP or FQDN]:8080
+
+#Troubleshooting tips to be added later. General tips for now:
+#Any errors will put your cluster health in a constant warning state
+# Check systemd logs. Ignore any 'has missing NOTIFY_TYPES member' warnings.
+# if you want to go down that rabbit hole, you can work on the warnings later.
+
+#Show node dashboard logs
+journalctl -xeu ceph-mgr@[serverName]
