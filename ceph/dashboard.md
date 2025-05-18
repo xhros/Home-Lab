@@ -96,8 +96,8 @@ Syntax: ceph dashboard ac-user-create [user] -i [/etc/pve/ceph/dashboard-pw] [ro
 ceph dashboard ac-user-create admin -i /etc/pve/ceph/dashboard-pw administrator
 ```
 
-<h2>Section 3a: Generate a self signed certificate - quick and dirty method</h2>
-
+<h2>Section 3: Generate a self signed certificate - quick and dirty method</h2>
+<h3>DO NOT DO THIS IF YOU ALREADY HAVE CA SIGNED CERTIFICATES!!</h3>
 ```bash
 ceph dashboard create-self-signed-cert
 ```
