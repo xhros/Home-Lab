@@ -124,9 +124,9 @@ ceph config get mgr mgr/dashboard/$name/ssl_server_port
 Technically, this isn't even needed since the dashboard uses the default configs. You can check the configs and adjust as needed. This is only performed on the master node since it's global. Note: Using :: as the server address binds to all IPv4 and IPv6 addresses.
 
 ```bash
-ceph config set mgr mgr/dashboard/server_addr [::]
-ceph config set mgr mgr/dashboard/server_port [8080]
-ceph config set mgr mgr/dashboard/ssl_server_port [8443]
+ceph config set mgr mgr/dashboard/server_addr ::
+ceph config set mgr mgr/dashboard/server_port 8080
+ceph config set mgr mgr/dashboard/ssl_server_port 8443
 ```
 
 <h3>Checking the dashboard configs - Globally </h3>
