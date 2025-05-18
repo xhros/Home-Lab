@@ -68,20 +68,8 @@ ceph dashboard ac-user-create admin -i /etc/pve/ceph/dashboard-pw administrator
 <h2>Section 3a: Generate a self signed certificate - quick and dirty method</h2>
 
 ```bash
-openssl req -newkey rsa:4096 -nodes -x509 \
--keyout /etc/pve/ceph/dashboard-key.pem -out /etc/pve/ceph/dashboard-crt.pem -sha512 \
--days 3650 -subj "/CN=IT/O=ceph-mgr-dashboard" -utf8
+ceph dashboard create-self-signed-cert
 ```
-
-<h4>Pointing the dashboard to use the self signed certs</h4>
-
-```bash
-ceph config-key set mgr/dashboard/key -i /etc/pve/ceph/dashboard-key.pem
-ceph config-key set mgr/dashboard/crt -i /etc/pve/ceph/dashboard-crt.pem
-```
-
-<h2>Section 3b: Generating a CA certificate</h2>
-Do you own a domain name and use it internally? If not, move to the next section. Stay tuned for a future update on this section.
 
 <H2>Section 4a: Setting up the Dashboard Configs - Node Level</H2>
 Must be performed on all nodes. Since we already setup the environmental variables, just copy and paste the following lines. If you are using the global option and not environmental variables, skip to section 4b. 
