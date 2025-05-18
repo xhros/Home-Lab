@@ -20,14 +20,14 @@ echo "export ssl_server_port=8443" >> ~/.bashrc
 echo "export name=[serverName]" >> ~/.bashrc
 source ~/.bashrc
 ```
-<h4>zsh: ~/.zshrc - Skip this part if you are only using bash</h4>
+<h4>zsh: ~/.zshrc - Skip this part if you are only using bash. If you are using oh-my-zsh, replace 'source ~/.zshrc' with 'omz reload'</h4>
 
 ```bash
 echo "export server_addr=[node IP]" >> ~/.zshrc
 echo "export server_port=8080" >> ~/.zshrc
 echo "export ssl_server_port=8443" >> ~/.zshrc
 echo "export name=[serverName]" >> ~/.zshrc
-run 'omz reload' if using oh-my-zsh, else run 'source ~/.zshrc'
+source ~/.zshrc
 ```
 
 <h2>Section 2: Installing the dashboard module</h2>
