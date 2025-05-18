@@ -63,7 +63,7 @@ Syntax: ceph dashboard ac-user-create [user] -i [/path/to/pw/file] [role]
 ceph dashboard ac-user-create admin -i /path/to/pw/file administrator
 ```
 
-<h2>Section 3: Generate a dashboard certificate - quick and dirty method using a self-signed certificate</h2>
+<h2>Section 3a: Generate a self signed certificate - quick and dirty method</h2>
 
 ```bash
 openssl req -newkey rsa:4096 -nodes -x509 \
@@ -78,11 +78,12 @@ openssl req -newkey rsa:4096 -nodes -x509 \
 ceph config-key set mgr/dashboard/key -i /etc/ceph/dashboard-key.pem
 ceph config-key set mgr/dashboard/crt -i /etc/ceph/dashboard-crt.pem
 ```
-<h3>Do you own a domain and use it internally, and want to generate a CA signed certificate?</h3>
-Stay tuned for a future update on this section.
 
-<H2>Setting up the Dashboard Configs - Node Level</H2>
-Since we already setup the environmental variables, just copy and paste the following lines.
+<h2>Section 3b: Generating a CA certificate</h2>
+Do you own a domain name and use it internally? If not, move to the next section. Stay tuned for a future update on this section.
+
+<H2>Section 4a: Setting up the Dashboard Configs - Node Level</H2>
+Since we already setup the environmental variables, just copy and paste the following lines. If you are using the global option and not environmental variables, skip to section 4b. 
 
 ```bash
 ceph config set mgr mgr/dashboard/$name/server_addr $server_addr
@@ -98,7 +99,7 @@ ceph config get mgr mgr/dashboard/$name/server_port
 ceph config get mgr mgr/dashboard/$name/ssl_server_port
 ```
 
-<H2>Setting up the Dashboard Configs - Globally</H2>
+<H2>Section 4b: Setting up the Dashboard Configs - Global Option</H2>
 We will be using the default ports. Change these to fit your needs. Using :: as the server address binds to all IPv4 and IPv6 addresses.
 
 ```bash
