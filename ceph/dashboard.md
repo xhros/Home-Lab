@@ -136,7 +136,9 @@ ceph config get mgr mgr/dashboard/server_addr
 ceph config get mgr mgr/dashboard/server_port
 ceph config get mgr mgr/dashboard/ssl_server_port
 ```
-<h2>Starting the dashboard</h2>
+<h2>Section 5: Starting the dashboard</h2>
+
+Run the following command to start your dashboard.
 
 ```bash
 ceph mgr module disable dashboard && ceph mgr module enable dashboard
@@ -150,6 +152,14 @@ There are two ways to access the dashboard. Using the IP, or using the FQDN. Fro
 Secure: https://[IP or FQDN]:8443 
 <br/>
 Insecure: http://[IP or FQDN]:8080
+<br/>
+<br/>
+Your proxmox cluster will always redirect the dashboard to the master node. If you are using a FQDN to access the dashboard, it will redirect you to the IP address of the master node. Kind of feels pointless to use an FQDN, right? To fix that, run the following command, and it will redirect you to the hostname instead.<br/>
+
+```bash
+ceph config set mgr mgr/dashboard/redirect_resolve_ip_addr True
+```
+<br/>
 
 <h2>Troubleshooting</h2>
 <h4>Ceph Crash Logs</h4>
