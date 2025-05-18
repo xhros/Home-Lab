@@ -2,7 +2,7 @@
 
 **Warning:** You will run into potential rabbit holes while setting this up. Those will be marked as such, so don't go chasing those unless you want to spend additional hours of your time on something that has no impact on getting the dashboard up and running.
 
-Before we start, let's get some environmental variables setup for each manager node. What?! But why?!?! Honestly, they are easier to work with because global settings are applied to all nodes. This causes an IP conflict and the dashboard crashes on the slave nodes. This puts the cluster health in a persistent warning state, even after the issue is fixed. Basic troubleshooting steps are provided below. 
+Before we start, let's get some environmental variables setup for each manager node. What?! But why?!?! Honestly, they are easier to work with because global settings are applied to all nodes. This causes an IP conflict and the dashboard crashes on the slave nodes. This puts the cluster health in a persistent warning state, even after the issue is fixed. Basic troubleshooting steps and how to clear those are provided below. 
 
 Do you like to live dangerously? Skip to the installation section and use the default global level settings. 
 
