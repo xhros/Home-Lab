@@ -6,10 +6,10 @@ Before we start, let's get some environmental variables setup for each manager n
 
 Do you like to live dangerously? Skip to the installation section and use the default global level settings. 
 
-This dashboard needs to be installed on every manager node, so each node will needs environmental variables setup. Make sure to update the IP address and server name to match the manager nodes details. Rabbit hole #1: You cannot use ports 443 or 80 since they are already allocated for use with [NGINX Proxy Manager](https://pve.proxmox.com/wiki/Web_Interface_Via_Nginx_Proxy). The dashboard uses the default ports of 8443 (secure) and 8080 (insecure), but you can change them to whatever you want. You really don't need to setup or mess with the insecure port, but why not have full control over it if it's there by default.
+The dashboard module needs to be installed on every manager node, so each node will needs environmental variables setup. Make sure to update the IP address and server name to match the manager nodes details. Rabbit hole #1: You cannot use ports 443 or 80 since they are already allocated for use with [NGINX Proxy Manager](https://pve.proxmox.com/wiki/Web_Interface_Via_Nginx_Proxy). The dashboard uses the default ports of 8443 (secure) and 8080 (insecure), but you can change them to whatever you want. You really don't need to setup or mess with the insecure port, but why not have full control over it if it's there by default.
 
 <h2>Section 1: Environmental Variables</h2>
-These commands need to be run on every manager node. Make sure to update the IP address and server name to match your setup. Unless you are running a different shell, you only need to worry about the bash command since Proxmox uses Debian. 
+These commands need to be run on every manager node. Make sure to update the IP address and server name to match your setup. Unless you are running a different shell, you only need to worry about the bash commands since Proxmox uses Debian. You only need to perform the environmental variables for the shell that you are using. Move on the the module install once you run those. 
 
 <h4>bash: ~/.bashrc</h4>
 
@@ -20,7 +20,8 @@ echo "export ssl_server_port=8443" >> ~/.bashrc
 echo "export name=[serverName]" >> ~/.bashrc
 source ~/.bashrc
 ```
-<h4>zsh: ~/.zshrc - Skip this part if you are only using bash. If you are using oh-my-zsh, replace 'source ~/.zshrc' with 'omz reload'</h4>
+
+<h4>zsh: ~/.zshrc</h4>
 
 ```bash
 echo "export server_addr=[node IP]" >> ~/.zshrc
@@ -28,6 +29,16 @@ echo "export server_port=8080" >> ~/.zshrc
 echo "export ssl_server_port=8443" >> ~/.zshrc
 echo "export name=[serverName]" >> ~/.zshrc
 source ~/.zshrc
+```
+
+<h4>oh-my-zsh: ~/.zshrc
+  
+```bash
+echo "export server_addr=[node IP]" >> ~/.zshrc
+echo "export server_port=8080" >> ~/.zshrc
+echo "export ssl_server_port=8443" >> ~/.zshrc
+echo "export name=[serverName]" >> ~/.zshrc
+omz reload
 ```
 
 <h2>Section 2: Installing the dashboard module</h2>
