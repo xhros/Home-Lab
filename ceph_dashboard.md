@@ -101,8 +101,8 @@ ceph config get mgr mgr/dashboard/$name/server_port
 ceph config get mgr mgr/dashboard/$name/ssl_server_port
 ```
 
-<H2>Section 4b: Setting up the Dashboard Configs - Global Option</H2>
-We will be using the default ports. Change these to fit your needs. Using :: as the server address binds to all IPv4 and IPv6 addresses.
+<H2>Section 4b: Setting up the Dashboard Configs - Global Level</H2>
+This is only performed one on the master node. We will be using the default ports. Change these to fit your needs. Using :: as the server address binds to all IPv4 and IPv6 addresses.
 
 ```bash
 ceph config set mgr mgr/dashboard/server_addr [::]
