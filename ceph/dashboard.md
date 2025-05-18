@@ -1,5 +1,9 @@
 <h1>Setting up the ceph dashboard</h1>
 
+This is my current environment: <br/>
+Proxmox 8.4.1 <br/>
+Ceph 19.2.1
+
 This is a work in progress. I am continuing to update as I mess around with some of the more advanced features.
 
 **Warning:** You will run into potential rabbit holes while setting this up. Those will be marked as such, so don't go chasing those unless you want to spend additional hours of your time on something that has no impact on getting the dashboard up and running.
