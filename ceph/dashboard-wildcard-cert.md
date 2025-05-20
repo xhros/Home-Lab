@@ -7,10 +7,11 @@ Let's say you are using valid certs for node#.yourDomain.com for each of your no
 
 I learned this the hard way, and I'm sharing what I did to resolve this issue. Since proxmox does not generate wildcard certificates, we will use a third party tool called [acme.sh](https://github.com/acmesh-official/acme.sh). We are also using Let's Encrypt and Cloudflare. 
 
-Store your Cloudflare token
+Store your Cloudflare token. One or the other, but not both (whichever shell you are using)
 
 ```bash
 echo "export CF_Token="YourCloudflareToken"" >> ~/.bashrc
+echo "export CF_Token="YourCloudflareToken"" >> ~/.zshrc
 ```
 
 Reload your shell (whichever shell you are using)
